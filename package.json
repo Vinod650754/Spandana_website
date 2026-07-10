@@ -1,0 +1,22 @@
+{
+  "name": "spandana-project",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --prefix apps/web",
+    "dev:api": "npm run dev --prefix apps/api",
+    "dev": "concurrently -n web,api -c cyan,magenta \"npm run dev:web\" \"npm run dev:api\"",
+    "build:web": "npm run build --prefix apps/web",
+    "build:api": "npm run build --prefix apps/api",
+    "build": "npm run build:web && npm run build:api",
+    "start:web": "npm run start --prefix apps/web",
+    "start:api": "npm run start --prefix apps/api"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.20.0",
+    "concurrently": "^9.1.2"
+  }
+}

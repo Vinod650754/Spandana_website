@@ -1,0 +1,76 @@
+# =========================
+# Dependencies
+# =========================
+node_modules/
+
+# =========================
+# Next.js
+# =========================
+.next/
+out/
+
+# =========================
+# Build
+# =========================
+dist/
+build/
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+!.env.example
+
+apps/api/.env
+apps/web/.env.local
+
+# =========================
+# Logs
+# =========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# VS Code
+# =========================
+.vscode/settings.json
+
+# =========================
+# Coverage
+# =========================
+coverage/
+
+# =========================
+# Turbopack cache
+# =========================
+.turbo/
+
+# =========================
+# Misc
+# =========================
+*.tsbuildinfo
+
+# =========================
+# Temporary browser profiles
+# =========================
+.tmp-edge-profile/
+.tmp-edge-profile-2/
+.tmp-edge-profile-admin/
+.tmp-edge-profile-admin-2/
+
+# =========================
+# Temporary test files
+# =========================
+test-image.png
+
+# Uncomment if screenshots are only for local testing
+# screenshots/
