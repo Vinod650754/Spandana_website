@@ -44,18 +44,39 @@ type AboutRow = {
   updated_at: string;
 };
 
+function parseJsonArray(value: unknown) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+}
+
 function normalizeAbout(row: AboutRow) {
+  const objectives = parseJsonArray(row.objectives).filter((value): value is string => typeof value === "string");
+  const impact = parseJsonArray(row.impact);
+  const timeline = parseJsonArray(row.timeline);
+
   return {
     id: row.id,
     yearEstablished: row.year_established,
-    introduction: row.introduction,
-    mission: row.mission,
-    vision: row.vision,
-    objectives: row.objectives,
-    impact: row.impact,
-    instagramUrl: row.instagram_url,
-    timeline: row.timeline,
-    futureMessage: row.future_message,
+    introduction: row.introduction ?? "",
+    mission: row.mission ?? "",
+    vision: row.vision ?? "",
+    objectives,
+    impact,
+    instagramUrl: row.instagram_url ?? "",
+    timeline,
+    futureMessage: row.future_message ?? "",
     updatedAt: row.updated_at,
   };
 }
@@ -75,12 +96,13 @@ aboutRouter.get("/", async (_request, response) => {
 
     const content = normalizeAbout(result.rows[0]);
     const parsed = aboutSchema.safeParse(content);
-
-    if (!parsed.success) {
-      return response.status(500).json({ message: "About content is invalid.", issues: parsed.error.flatten() });
+    if (parsed.success) {
+      response.json({ data: { ...content, ...parsed.data } });
+      return;
     }
 
-    response.json({ data: { ...content, ...parsed.data } });
+    // Avoid taking down the public About API when persisted content has stale/malformed fields.
+    response.json({ data: content, warning: "About content is partially invalid and was returned in fallback-safe mode." });
   } catch (error) {
     response.status(500).json({ message: "Failed to fetch about content." });
   }

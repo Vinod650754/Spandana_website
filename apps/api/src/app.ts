@@ -19,9 +19,29 @@ import { env } from "./config/env.js";
 
 export function createApp() {
   const app = express();
+  const allowedOrigins = new Set(env.frontendUrls.map((origin) => origin.replace(/\/+$/, "")));
 
   app.use(helmet({ crossOriginResourcePolicy: false }));
-  app.use(cors({ origin: env.frontendUrl, credentials: true }));
+  app.use(
+    cors({
+      credentials: true,
+      origin(origin, callback) {
+        // Allow server-to-server requests (no Origin header) and configured frontend origins.
+        if (!origin) {
+          callback(null, true);
+          return;
+        }
+
+        const normalizedOrigin = origin.replace(/\/+$/, "");
+        if (allowedOrigins.has(normalizedOrigin)) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error("Not allowed by CORS"));
+      },
+    })
+  );
   app.use(compression());
   app.use(express.json({ limit: "10mb" }));
   app.use(express.urlencoded({ extended: true }));

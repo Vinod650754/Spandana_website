@@ -383,6 +383,47 @@ eventRouter.post("/:id/draft", requireAdmin, async (request, response) => {
   }
 });
 
+eventRouter.post("/:id/cover", requireAdmin, upload.single("coverImage"), async (request, response) => {
+  try {
+    if (!request.file) {
+      return response.status(400).json({ message: "Cover image file is required." });
+    }
+
+    const existingResult = await query<EventRow>(
+      `select id, title, slug, short_description, description, category, venue, event_date, start_time, end_time, cover_image, cover_image_public_id, gallery_images, registration_link, featured, status, display_order, created_at, updated_at
+       from events
+       where id = $1
+       limit 1`,
+      [request.params.id]
+    );
+
+    if (existingResult.rows.length === 0) {
+      return response.status(404).json({ message: "Event not found." });
+    }
+
+    const existing = existingResult.rows[0];
+    const newCover = await uploadImage(request.file.buffer, uuidv4(), "events");
+
+    const result = await query<EventRow>(
+      `update events
+       set cover_image = $1,
+           cover_image_public_id = $2,
+           updated_at = now()
+       where id = $3
+       returning id, title, slug, short_description, description, category, venue, event_date, start_time, end_time, cover_image, cover_image_public_id, gallery_images, registration_link, featured, status, display_order, created_at, updated_at`,
+      [newCover.secure_url, newCover.public_id, request.params.id]
+    );
+
+    if (existing.cover_image_public_id) {
+      await deleteImage(existing.cover_image_public_id).catch(() => undefined);
+    }
+
+    response.status(201).json({ message: "Event cover updated successfully.", data: normalizeEventRow(result.rows[0]) });
+  } catch (error) {
+    response.status(500).json({ message: "Failed to update event cover image." });
+  }
+});
+
 eventRouter.post("/:id/gallery", requireAdmin, upload.array("galleryImages", 20), async (request, response) => {
   try {
     const existingResult = await query<EventRow>(
