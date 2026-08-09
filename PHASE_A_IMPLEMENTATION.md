@@ -91,9 +91,8 @@ JWT_EXPIRES_IN=7d
 # Cloudinary Configuration
 # ⚠️ Keep API Secret private - never commit to version control!
 CLOUDINARY_CLOUD_NAME=vinod0717
-CLOUDINARY_API_KEY=877467453887467
-CLOUDINARY_API_SECRET=xMQVp2RBOT2OPcNxQYoqOJFy3_s
-
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 # Frontend Configuration
 FRONTEND_URL=http://localhost:3000
 
@@ -113,8 +112,8 @@ NEXT_PUBLIC_API_URL=http://localhost:4000
 | Variable | Value | Notes |
 |----------|-------|-------|
 | `CLOUDINARY_CLOUD_NAME` | `vinod0717` | Your Cloudinary account name |
-| `CLOUDINARY_API_KEY` | `877467453887467` | API key from Cloudinary console |
-| `CLOUDINARY_API_SECRET` | `xMQVp2RBOT2OPcNxQYoqOJFy3_s` | Keep this secret! |
+| `CLOUDINARY_API_KEY` | `your_api_key` | API key from Cloudinary console |
+| `CLOUDINARY_API_SECRET` | `your_api_secrets` | Keep this secret! |
 | `DATABASE_URL` | PostgreSQL connection | Format: `postgresql://user:pass@host:port/dbname` |
 | `JWT_SECRET` | Any random string | Generate a long random string for production |
 | `FRONTEND_URL` | Frontend URL | Used for CORS configuration |

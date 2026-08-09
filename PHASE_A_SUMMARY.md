@@ -132,8 +132,8 @@
 ```env
 # Cloudinary
 CLOUDINARY_CLOUD_NAME=vinod0717
-CLOUDINARY_API_KEY=877467453887467
-CLOUDINARY_API_SECRET=xMQVp2RBOT2OPcNxQYoqOJFy3_s
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 
 # Database
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/spandana
